@@ -5,6 +5,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import riccardogulin.u5d11.entities.User;
+import riccardogulin.u5d11.exceptions.UnauthorizedException;
 
 import java.util.Date;
 
@@ -29,6 +30,17 @@ public class TokenTools {
 				.compact();
 	}
 
-//	public void verifyToken() {
-//	}
+	public void verifyToken(String token) {
+		// Questo metodo parse, si occupa di leggere il token e verificare:
+		// - l'integrità tramite firma
+		// - la scadenza (è nel payload)
+		// - se il token è mal formato oppure no
+		// Ci lancerà un'eccezione per ogni problematica
+		try {
+			Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secret.getBytes())).build().parse(token);
+		} catch (Exception ex) {
+			throw new UnauthorizedException("Problemi col token! Effettua di nuovo il login!");
+		}
+
+	}
 }

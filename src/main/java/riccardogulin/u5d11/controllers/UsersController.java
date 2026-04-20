@@ -2,16 +2,11 @@ package riccardogulin.u5d11.controllers;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import riccardogulin.u5d11.entities.User;
-import riccardogulin.u5d11.exceptions.ValidationException;
-import riccardogulin.u5d11.payloads.NewUserRespDTO;
 import riccardogulin.u5d11.payloads.UserDTO;
 import riccardogulin.u5d11.services.UsersService;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -24,25 +19,6 @@ public class UsersController {
 		this.usersService = usersService;
 	}
 
-	// 1. POST http://localhost:3001/users (+ req.body)
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED) // 201
-	public NewUserRespDTO saveUser(@RequestBody @Validated UserDTO body, BindingResult validationResult) {
-
-
-		if (validationResult.hasErrors()) {
-
-			// String errors = validationResult.getFieldErrors().stream()
-			// .map(error -> error.getDefaultMessage())
-			// .collect(Collectors.joining(". "));
-//			throw new ValidationException(errors);
-			List<String> errors = validationResult.getFieldErrors().stream().map(error -> error.getDefaultMessage()).toList();
-			throw new ValidationException(errors);
-		}
-
-		User newUser = this.usersService.save(body);
-		return new NewUserRespDTO(newUser.getUserId());
-	}
 
 	// 2. GET http://localhost:3001/users
 	@GetMapping
