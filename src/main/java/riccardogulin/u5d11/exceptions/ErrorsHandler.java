@@ -28,6 +28,12 @@ public class ErrorsHandler {
 		return new ErrorsWithListDTO(ex.getMessage(), LocalDateTime.now(), ex.getErrors());
 	}
 
+	@ExceptionHandler(UnauthorizedException.class)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
+	public ErrorsDTO handleUnauthorizedEx(UnauthorizedException ex) {
+		return new ErrorsDTO(ex.getMessage(), LocalDateTime.now());
+	}
+
 	@ExceptionHandler(NotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND) // 404
 	// Tra le parentesi specifico il tipo di eccezione che dovrà gestire questo metodo
